@@ -2,17 +2,17 @@ import time
 import telebot
 from datetime import datetime, timedelta
 import threading
+import os
 
 # Token do seu bot
 TOKEN = '7609406956:AAEKRxbV1_VRDhxOb2Lc342P3ma9VRivDN8'
 bot = telebot.TeleBot(TOKEN)
 chat_id = '-4637658746'
 
-# Dicionário para armazenar estado de cada usuário
-usuarios = {}
+user_state = {}
 
 # Função de envio com delay
-def agendar_mensagem(nome, saida):
+def agendar_mensagem(chat_id, nome, saida):
     time.sleep(10)  # Espera 55 minutos
     mensagem = f"""
 ___________________________________
@@ -68,7 +68,8 @@ Irei te avisar 5 minutos antes de terminar!
             bot.send_message(chat_id, mensagem)
 
             # Iniciar o timer para envio automático depois
-            threading.Thread(target=agendar_mensagem, args=(nome, saida)).start()
+            threading.Thread(target=agendar_mensagem, args=(message.chat.id, nome, saida)).start()
+
 
             # Remove o estado do usuário
             del user_state[user_id]
@@ -78,7 +79,7 @@ Irei te avisar 5 minutos antes de terminar!
 
 # Inicia o bot
 print("Bot rodando...")
-bot.infinity_polling()
+bot.infinity_polling(drop_pending_updates=True)
 
 # Comando para fim o bot (apenas para o seu ID)
 @bot.message_handler(commands=['fim'])
