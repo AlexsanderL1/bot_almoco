@@ -1,5 +1,2 @@
 pyTelegramBotAPI
-time
-telebot
-datetime
-os
+
