@@ -8,8 +8,8 @@ TOKEN = '7609406956:AAEKRxbV1_VRDhxOb2Lc342P3ma9VRivDN8'
 bot = telebot.TeleBot(TOKEN)
 chat_id = '-4637658746'
 
-# Dicionário para armazenar estados de cada usuário
-user_state = {}
+# Dicionário para armazenar estado de cada usuário
+usuarios = {}
 
 # Função de envio com delay
 def agendar_mensagem(nome, saida):
@@ -79,3 +79,13 @@ Irei te avisar 5 minutos antes de terminar!
 # Inicia o bot
 print("Bot rodando...")
 bot.infinity_polling()
+
+# Comando para fim o bot (apenas para o seu ID)
+@bot.message_handler(commands=['fim'])
+def fim(mensagem):
+    if mensagem.from_user.id == SEU_ID:
+        bot.send_message(mensagem.chat.id, "Encerrando o bot...")
+        os._exit(0)  # Força o encerramento
+    else:
+        bot.send_message(mensagem.chat.id, "Você não tem permissão para isso.")
+
