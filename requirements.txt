@@ -1,5 +1,5 @@
 pyTelegramBotAPI
-import time
-import telebot
-from datetime import datetime, timedelta
-import os
+time
+telebot
+datetime
+os
