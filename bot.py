@@ -13,7 +13,7 @@ user_state = {}
 
 # Função de envio com delay
 def agendar_mensagem(nome, saida):
-    time.sleep(3300)  # Espera 55 minutos
+    time.sleep(10)  # Espera 55 minutos
     mensagem = f"""
 ___________________________________
 ‼️ {nome}, seu almoço terminou! ‼️
@@ -28,7 +28,7 @@ ___________________________________
 @bot.message_handler(commands=['almoco'])
 def iniciar_almoco(message):
     user_id = message.from_user.id
-    bot.send_message(message.chat.id, "Digite seu nome completo:")
+    bot.send_message(message.chat.id, "Como posso te chamar?")
     user_state[user_id] = {'step': 'nome'}
 
 # Captura e gerencia as mensagens dos usuários
