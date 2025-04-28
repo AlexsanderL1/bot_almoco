@@ -7,22 +7,32 @@ import os
 # Token do seu bot
 TOKEN = '7609406956:AAEKRxbV1_VRDhxOb2Lc342P3ma9VRivDN8'
 bot = telebot.TeleBot(TOKEN)
+
+# ID do grupo onde o bot vai mandar mensagens
 chat_id = '-4637658746'
+
+# Seu ID pessoal (trocar depois se necessário)
+SEU_ID = 5988594763  # <-- já coloquei o seu aqui!
 
 user_state = {}
 
 # Função de envio com delay
 def agendar_mensagem(chat_id, nome, saida):
-    time.sleep(10)  # Espera 55 minutos
+    time.sleep(55 * 60)  # Espera 55 minutos
     mensagem = f"""
 ___________________________________
-‼️ {nome}, seu almoço terminou! ‼️
+‼️ {nome}, seu almoço terminará em 5 minutos! ‼️
 ___________________________________
 
 ✍️Horário de saída: {saida}🗓️
-💼Agora você pode voltar ao trabalho!
+💼Prepare-se para voltar ao trabalho!
 """
     bot.send_message(chat_id, mensagem)
+
+# Comando para descobrir seu próprio ID
+@bot.message_handler(commands=['id'])
+def enviar_id(message):
+    bot.send_message(message.chat.id, f"Seu ID é: {message.from_user.id}")
 
 # Início do processo com o comando /almoco
 @bot.message_handler(commands=['almoco'])
@@ -68,8 +78,7 @@ Irei te avisar 5 minutos antes de terminar!
             bot.send_message(chat_id, mensagem)
 
             # Iniciar o timer para envio automático depois
-            threading.Thread(target=agendar_mensagem, args=(message.chat.id, nome, saida)).start()
-
+            threading.Thread(target=agendar_mensagem, args=(chat_id, nome, saida)).start()
 
             # Remove o estado do usuário
             del user_state[user_id]
@@ -77,11 +86,7 @@ Irei te avisar 5 minutos antes de terminar!
             bot.send_message(message.chat.id, "Tudo bem! Me avise quando bater o ponto com /almoco.")
             del user_state[user_id]
 
-# Inicia o bot
-print("Bot rodando...")
-bot.infinity_polling(drop_pending_updates=True)
-
-# Comando para fim o bot (apenas para o seu ID)
+# Comando para finalizar o bot
 @bot.message_handler(commands=['fim'])
 def fim(mensagem):
     if mensagem.from_user.id == SEU_ID:
@@ -90,3 +95,7 @@ def fim(mensagem):
     else:
         bot.send_message(mensagem.chat.id, "Você não tem permissão para isso.")
 
+# Inicia o bot
+print("Bot rodando...")
+bot.remove_webhook()
+bot.infinity_polling()
